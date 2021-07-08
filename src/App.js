@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import useSWR from "swr";
+import { request } from "graphql-request";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import { LANDING_PRODUCTS } from "./gql";
+import { GQL_URI } from "./config";
+
+const App = () => {
+    const fetcher = (query, first, filter, sortBy) =>
+        request(GQL_URI, query, { first, filter, sortBy });
+
+    const { data, error } = useSWR(
+        [LANDING_PRODUCTS, 3, { visibleInListings: true }, { field: "PRICE", direction: "DESC" }],
+        fetcher
+    );
+    const loading = !data;
+    console.log(loading, data, error);
+
+    return <div>hi</div>;
+};
 
 export default App;
