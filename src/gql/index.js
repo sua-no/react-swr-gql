@@ -1,8 +1,9 @@
-import { gql } from "@apollo/client";
-
-const productFragment = gql`
-    fragment productField on Product {
-        id
+export const LANDING_PRODUCTS = `
+    query {
+        products(first: 2, sortBy: {field: ID, direction: DESC}) {
+            edges {
+                node {
+                    id
         name
         pricing {
             priceRange {
@@ -14,24 +15,10 @@ const productFragment = gql`
             }
         }
         variants {
-            copyright {
-                name
-                singer
-            }
             stocks {
                 quantity
             }
         }
-    }
-`;
-
-export const LANDING_PRODUCTS = `
-    ${productFragment}
-    query landingProducts($first: Int, $filter: ProductFilterInput, $sortBy: ProductOrder) {
-        products(first: $first, filter: $filter, sortBy: $sortBy) {
-            edges {
-                node {
-                    ...productField
                 }
             }
         }

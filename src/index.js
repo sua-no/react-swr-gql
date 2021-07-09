@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { SWRConfig } from "swr";
 
 import { GQL_URI } from "./config";
 
@@ -14,7 +15,14 @@ const client = new ApolloClient({
 
 ReactDOM.render(
     <ApolloProvider client={client}>
-        <App />
+        <SWRConfig
+            value={{
+                refreshInterval: 10000,
+                fetcher: (...args) => fetch(...args).then((res) => res.json()),
+            }}
+        >
+            <App />
+        </SWRConfig>
     </ApolloProvider>,
     document.getElementById("root")
 );
